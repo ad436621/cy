@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Fundamentals | 🔐 Cybersecurity Exam | Eng. Ahmed Eid</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary:      #0a1628;
+            --primary-mid:  #0d2137;
+            --accent:       #00d4aa;
+            --cyber-blue:   #00b4d8;
+            --matrix:       #00ff41;
+            --gold:         #f39c12;
+            --success:      #00e676;
+            --danger:       #ff3366;
+            --bg:           #060e1a;
+            --card:         #0d1b2a;
+            --glow:         #00d4aa33;
+            --text:         #e0f7fa;
+            --muted:        #607d8b;
+            --font-main:    'Cairo', 'Tajawal', sans-serif;
+            --font-mono:    'Fira Code', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            font-family: var(--font-main);
+            background-color: var(--bg);
+            color: var(--text);
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Scanline Overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 212, 170, 0.02) 2px, rgba(0, 212, 170, 0.02) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Particle Background */
+        #particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            color: var(--matrix);
+            font-family: var(--font-mono);
+            opacity: 0.1;
+            font-size: 14px;
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh); opacity: 0; }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+
+        /* --- SCREEN LAYOUT RESTRUCTURED --- */
+        .screen { 
+            display: none; 
+            width: 100%;
+            min-height: 100vh;
+            z-index: 10;
+            animation: fadeInScreen 0.5s ease forwards;
+        }
+        .screen.active { 
+            display: block; 
+        }
+
+        @keyframes fadeInScreen {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .screen-content {
+            padding: 2rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- SCREEN 1: WELCOME --- */
+        #screen1 {
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        #screen1 .screen-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: calc(100vh - 4rem);
+        }
+
+        .hero-element {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUpFade 0.6s forwards;
+        }
+
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .top-badge {
+            background: rgba(13, 33, 55, 0.8);
+            border: 1px solid var(--glow);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--cyber-blue);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(5px);
+            animation-delay: 0.2s;
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: pulseGlow 2s infinite alternate;
+            animation-delay: 0.4s;
+            text-shadow: 0 0 20px var(--accent);
+        }
+
+        @keyframes pulseGlow {
+            from { filter: drop-shadow(0 0 5px var(--accent)); transform: scale(1); }
+            to { filter: drop-shadow(0 0 15px var(--accent)); transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            animation-delay: 0.6s;
+            background: linear-gradient(90deg, var(--text), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            animation-delay: 0.8s;
+            height: 30px; 
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.2rem;
+            background-color: var(--matrix);
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .divider {
+            width: 100px;
+            height: 2px;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+            margin: 0 auto 2rem auto;
+            animation-delay: 1s;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            animation-delay: 1.2s;
+        }
+
+        .stat-item {
+            background: rgba(10, 22, 40, 0.6);
+            border: 1px solid var(--primary-mid);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: var(--font-main);
+            color: var(--matrix);
+            font-weight: bold;
+        }
+
+        .name-card {
+            background: rgba(13, 27, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glow);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            animation-delay: 1.4s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .name-card label {
+            display: block;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .name-card input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            border: 1px solid var(--primary-mid);
+            color: var(--text);
+            font-family: var(--font-main);
+            font-size: 1.1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            outline: none;
+            text-align: center;
+        }
+
+        .name-card input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--glow);
+        }
+        
+        .name-card input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 15px rgba(255, 51, 102, 0.3);
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .system-ready {
+            font-family: var(--font-mono);
+            color: var(--matrix);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        button.start-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-mid);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: var(--font-main);
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        button.start-btn::before {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 170, 0.4), transparent);
+            transform: skewX(-20deg);
+            transition: all 0.5s ease;
+        }
+
+        button.start-btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 0 20px var(--glow);
+            transform: scale(1.02);
+        }
+
+        button.start-btn:hover::before {
+            left: 200%;
+        }
+
+        /* --- SCREEN 2: EXAM --- */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--accent);
+            box-shadow: 0 4px 15px var(--glow);
+            z-index: 100;
+            width: 100%;
+        }
+
+        .top-bar-title { font-weight: 700; }
+        .top-bar-progress { font-family: var(--font-mono); color: var(--matrix); }
+
+        .progress-container {
+            position: absolute;
+            bottom: -2px; left: 0; width: 100%; height: 3px;
+            background: var(--primary-mid);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--matrix);
+            box-shadow: 0 0 10px var(--matrix);
+            transition: width 0.4s ease;
+        }
+
+        .q-card {
+            background: var(--card);
+            border: 1px solid var(--glow);
+            box-shadow: 0 0 8px rgba(0, 212, 170, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s ease;
+            position: relative;
+        }
+        
+        .q-card.answered {
+            border-color: rgba(0, 255, 65, 0.4);
+        }
+        
+        .q-card.essay-card {
+            border-left: 3px solid var(--gold);
+            border-right: 3px solid var(--gold);
+        }
+
+        .q-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+            justify-content: space-between;
+        }
+
+        .q-badge {
+            background: var(--primary);
+            border: 1px solid var(--accent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 0 5px var(--glow);
+        }
+        
+        .essay-note {
+            font-size: 0.8rem;
+            color: var(--gold);
+            background: rgba(243, 156, 18, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .q-num {
+            font-family: var(--font-mono);
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .q-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .q-text[dir="ltr"] {
+            text-align: left;
+        }
+
+        /* --- CSS DRAWINGS --- */
+        .css-drawing-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: rgba(10, 22, 40, 0.5);
+            border-radius: 8px;
+            border: 1px dashed var(--primary-mid);
+        }
+
+        /* 1. Keys Drawing */
+        .css-keys { display: flex; gap: 40px; align-items: center; justify-content: center; }
+        .css-key-wrapper { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .css-key-icon {
+            width: 45px; height: 16px; background: var(--cyber-blue);
+            position: relative; border-radius: 0 8px 8px 0;
+            margin-left: 20px;
+        }
+        .css-key-icon::before {
+            content: ''; position: absolute;
+            left: -20px; top: -6px; width: 28px; height: 28px;
+            border: 6px solid var(--cyber-blue); border-radius: 50%; box-sizing: border-box;
+            background: var(--primary);
+        }
+        .css-key-icon::after {
+            content: ''; position: absolute;
+            right: 8px; top: 16px; width: 6px; height: 10px;
+            background: var(--cyber-blue);
+            box-shadow: -10px 0 0 var(--cyber-blue);
+        }
+        .css-key-icon.private { background: var(--danger); }
+        .css-key-icon.private::before { border-color: var(--danger); }
+        .css-key-icon.private::after { background: var(--danger); box-shadow: -10px 0 0 var(--danger); }
+        .key-label { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text); background: var(--primary-mid); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+
+        /* 2. Hash Funnel Drawing */
+        .css-hash-box { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .hash-data { font-family: var(--font-mono); color: var(--text); background: var(--card); padding: 6px 16px; border-radius: 4px; font-size: 0.85rem; border: 1px dashed var(--muted); letter-spacing: 1px; }
+        .hash-funnel-wrapper { display: flex; flex-direction: column; align-items: center; }
+        .hash-funnel-top { 
+            width: 70px; height: 35px; background: var(--accent); 
+            clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%); 
+            display: flex; justify-content: center; align-items: flex-start; padding-top: 4px;
+        }
+        .hash-funnel-bottom { width: 28px; height: 12px; background: var(--accent); border-radius: 0 0 4px 4px; }
+        .hash-funnel-text { color: var(--primary); font-size: 11px; font-weight: bold; font-family: var(--font-mono); }
+        .hash-output { font-family: var(--font-mono); color: var(--matrix); background: rgba(0,255,65,0.1); border: 1px solid var(--matrix); padding: 6px 24px; border-radius: 4px; font-weight: bold; box-shadow: 0 0 10px rgba(0,255,65,0.2); }
+
+        /* 3. Certificate Drawing */
+        .css-cert-doc { display: flex; flex-direction: column; align-items: center; }
+        .cert-body { 
+            width: 80px; height: 110px; background: var(--text); 
+            border: 4px solid var(--gold); border-radius: 4px; 
+            position: relative; padding: 12px; box-sizing: border-box; 
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.2); 
+            display: flex; flex-direction: column; gap: 8px; 
+        }
+        .cert-header { width: 100%; height: 6px; background: var(--gold); border-radius: 2px; }
+        .cert-line { width: 100%; height: 4px; background: var(--muted); border-radius: 2px; opacity: 0.5; }
+        .cert-line.short { width: 60%; }
+        .cert-seal-wrapper { position: absolute; bottom: -5px; right: -5px; display: flex; flex-direction: column; align-items: center; transform: scale(1.1); }
+        .cert-seal { width: 28px; height: 28px; background: var(--danger); color: white; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 0 8px rgba(255,51,102,0.6); z-index: 2; position: relative;}
+        .cert-ribbon { display: flex; gap: 4px; margin-top: -8px; z-index: 1;}
+        .cert-ribbon-tail { width: 8px; height: 14px; background: var(--danger); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%); opacity: 0.9;}
+
+
+        /* MCQ */
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .mcq-option {
+            background: var(--primary);
+            border: 1px solid var(--primary-mid);
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .mcq-option:hover {
+            border-color: var(--accent);
+            background: rgba(0, 212, 170, 0.05);
+        }
+
+        .mcq-option.selected {
+            border-color: var(--accent);
+            background: rgba(0, 212, 170, 0.1);
+            box-shadow: 0 0 10px var(--glow);
+            transform: scale(1.01);
+        }
+
+        .opt-letter {
+            background: var(--primary-mid);
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 4px;
+            margin-left: 1rem;
+            font-family: var(--font-mono);
+            font-weight: bold;
+        }
+        
+        .mcq-option[dir="ltr"] .opt-letter {
+            margin-left: 0;
+            margin-right: 1rem;
+        }
+
+        .opt-text { flex: 1; text-align: right; }
+        .mcq-option[dir="ltr"] .opt-text { text-align: left; }
+
+        .opt-check {
+            color: var(--matrix);
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .mcq-option.selected .opt-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* T/F */
+        .tf-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tf-btn {
+            flex: 1;
+            padding: 1rem;
+            background: var(--primary);
+            border: 1px solid var(--primary-mid);
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tf-btn:hover { border-color: var(--cyber-blue); }
+        .tf-btn.selected {
+            border-color: var(--accent);
+            background: rgba(0, 212, 170, 0.1);
+            box-shadow: 0 0 10px var(--glow);
+        }
+
+        /* Inputs */
+        .essay-input {
+            width: 100%;
+            background: var(--primary);
+            border: 1px solid var(--primary-mid);
+            color: var(--text);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            font-family: var(--font-main);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            outline: none;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .essay-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.3);
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 3rem;
+            padding-bottom: 3rem;
+        }
+
+        .submit-btn {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-main);
+        }
+
+        .submit-btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(6, 14, 26, 0.9);
+            backdrop-filter: blur(5px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1; pointer-events: all;
+        }
+
+        .modal-card {
+            background: var(--card);
+            border: 1px solid var(--accent);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 0 30px var(--glow);
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-buttons {
+            display: flex; gap: 1rem; margin-top: 2rem;
+        }
+
+        .modal-btn {
+            flex: 1; padding: 0.8rem; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: var(--font-main);
+        }
+
+        .btn-confirm { background: var(--accent); color: var(--primary); border: none; }
+        .btn-cancel { background: transparent; border: 1px solid var(--muted); color: var(--text); }
+
+        /* --- SCREEN 3: RESULTS --- */
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .score-container {
+            position: relative;
+            width: 200px; height: 200px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .score-ring-bg { fill: none; stroke: var(--primary-mid); stroke-width: 12; }
+        .score-ring { 
+            fill: none; stroke: var(--accent); stroke-width: 12; 
+            stroke-dasharray: 565; stroke-dashoffset: 565;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s ease-out, stroke 0.5s;
+            filter: drop-shadow(0 0 8px var(--accent));
+        }
+
+        .score-text {
+            position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: var(--font-mono);
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text);
+        }
+        
+        .score-subtext {
+            position: absolute;
+            top: 70%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .performance-badge {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: popIn 0.5s 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes popIn { to { opacity: 1; transform: scale(1); } }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-box {
+            background: var(--card);
+            border: 1px solid var(--primary-mid);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-val { font-family: var(--font-mono); font-size: 1.5rem; color: var(--matrix); margin-bottom: 0.3rem;}
+        .stat-label { font-size: 0.85rem; color: var(--muted); }
+
+        /* Personal Message */
+        .personal-message-card {
+            background: rgba(13, 27, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 170, 0.27);
+            border-radius: 15px;
+            padding: 2.5rem;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-top: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUpFade 0.8s 1.5s forwards;
+        }
+
+        .msg-quote-mark {
+            position: absolute;
+            top: 10px; right: 20px;
+            font-size: 5rem;
+            color: var(--gold);
+            font-family: serif;
+            line-height: 1;
+            opacity: 0.3;
+        }
+
+        .msg-greeting {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .msg-body p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .msg-points { margin-top: 2rem; }
+        
+        .msg-point {
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateX(20px);
+            animation: slideRightFade 0.5s forwards;
+        }
+
+        @keyframes slideRightFade { to { opacity: 1; transform: translateX(0); } }
+
+        .mp-label {
+            display: block;
+            font-weight: bold;
+            color: var(--cyber-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .mp-ayah {
+            display: block;
+            color: var(--gold);
+            font-size: 1.3rem;
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(243, 156, 18, 0.3);
+        }
+
+        .mp-hadith {
+            display: block;
+            font-style: italic;
+            color: var(--text);
+            border-right: 3px solid var(--accent);
+            padding-right: 1rem;
+            margin: 1rem 0;
+            background: rgba(0, 212, 170, 0.05);
+            padding: 1rem;
+            border-radius: 4px;
+        }
+
+        .msg-signature {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--glow);
+            text-align: left;
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        /* Review Section Detailed */
+        .review-section {
+            margin-top: 3rem;
+            border-top: 1px solid var(--primary-mid);
+            padding-top: 1rem;
+        }
+        
+        .review-btn {
+            background: none; border: none; color: var(--cyber-blue); cursor: pointer; font-family: var(--font-main); font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; margin: 0 auto;
+        }
+        
+        .review-content { display: none; margin-top: 1.5rem; }
+        .review-content.active { display: block; }
+        
+        .rev-item { background: var(--primary); padding: 1.2rem; border-radius: 8px; margin-bottom: 1rem; border-right: 4px solid var(--muted); line-height: 1.6;}
+        .rev-item.correct { border-color: var(--success); }
+        .rev-item.wrong { border-color: var(--danger); }
+        .rev-item.manual { border-color: var(--gold); }
+        .rev-item.skipped { border-color: var(--muted); opacity: 0.85; }
+        
+        .rev-q { font-weight: bold; margin-bottom: 0.8rem; font-size: 1.1rem; }
+        .rev-ans { color: var(--text); font-size: 0.95rem; margin-bottom: 0.5rem; }
+        .rev-status { font-weight: bold; margin-bottom: 0.5rem; font-size: 1rem; }
+
+        .footer-sig {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: var(--muted);
+            border-top: 1px dashed var(--primary-mid);
+        }
+
+        /* Loading transition */
+        .transition-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--bg); z-index: 99999;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .transition-overlay.active { opacity: 1; pointer-events: all; }
+        .loader-text { font-family: var(--font-mono); color: var(--matrix); margin-top: 1rem; }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .tf-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles"></div>
+
+    <div class="transition-overlay" id="transition">
+        <div class="hero-icon">🔐</div>
+        <div class="loader-text" id="loader-text">INITIALIZING SECURE SESSION...</div>
+    </div>
+
+    <!-- ================= SCREEN 1: WELCOME ================= -->
+    <div id="screen1" class="screen active">
+        <div class="screen-content">
+            <div class="hero-element top-badge">Eng. Ahmed Eid | أحمد عيد · 🔐 Cybersecurity Exam System</div>
+            <div class="hero-element hero-icon">🛡️</div>
+            <h1 class="hero-element">Cybersecurity Fundamentals</h1>
+            <div class="hero-element subtitle">
+                <span id="typewriter"></span><span class="cursor"></span>
+            </div>
+            <div class="hero-element divider"></div>
+            
+            <div class="hero-element stats-row">
+                <div class="stat-item">90 سؤال شامل</div>
+                <div class="stat-item" style="color: var(--gold)">وقت مفتوح ⏳</div>
+            </div>
+
+            <div class="hero-element name-card">
+                <label>اكتب اسمك الأول عشان يبقى الامتحان باسمك 🤍</label>
+                <input type="text" id="studentName" placeholder="اسمك هنا..." autocomplete="off" maxlength="40">
+                <span class="system-ready">SYSTEM READY ></span>
+                <button class="start-btn" onclick="startExam()">🔓 ابدأ الامتحان</button>
+                <div id="nameError" style="color: var(--danger); font-size: 0.85rem; margin-top: 0.5rem; display: none;">اكتب اسمك الأول أولًا 😊</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SCREEN 2: THE EXAM ================= -->
+    <div id="screen2" class="screen">
+        <div class="top-bar">
+            <div class="top-bar-title">🛡️ Cybersecurity Exam</div>
+            <div class="top-bar-progress">Progress: <span id="prog-text">0/90</span></div>
+            <div class="progress-container">
+                <div class="progress-bar" id="prog-bar"></div>
+            </div>
+        </div>
+        <div class="screen-content">
+            <div class="questions-container" id="q-container">
+                <!-- Questions injected via JS -->
+            </div>
+
+            <div class="submit-container">
+                <button class="submit-btn" onclick="showSubmitModal()">🔒 سلّم الامتحان</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="submitModal">
+        <div class="modal-card">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
+            <h3>هل أنت متأكد إنك عايز تسلّم؟</h3>
+            <p style="color: var(--muted); margin-top: 0.5rem; font-size: 0.9rem;">الأسئلة المقالية لن تدخل في حساب النسبة المئوية للنتيجة، ولكن يمكنك مقارنتها في المراجعة.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-confirm" onclick="submitExam()">تأكيد ✓</button>
+                <button class="modal-btn btn-cancel" onclick="closeSubmitModal()">ارجع للمراجعة ←</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SCREEN 3: RESULTS ================= -->
+    <div id="screen3" class="screen">
+        <div class="screen-content">
+            <div class="results-header">
+                <h2 style="color: var(--accent); font-family: var(--font-mono); margin-bottom: 1rem;">SCORE (MCQ & T/F)</h2>
+                <div class="score-container">
+                    <svg viewBox="0 0 200 200" width="200" height="200">
+                        <circle class="score-ring-bg" cx="100" cy="100" r="90"></circle>
+                        <circle class="score-ring" id="scoreRing" cx="100" cy="100" r="90" transform="rotate(-90 100 100)"></circle>
+                    </svg>
+                    <div class="score-text"><span id="scoreVal">0</span>%</div>
+                    <div class="score-subtext" id="scoreFraction">0 / 0</div>
+                </div>
+                <div class="performance-badge" id="perfBadge">ANALYZING...</div>
+                <p style="color: var(--muted); font-size: 0.85rem;">* النسبة محسوبة على أساس أسئلة الاختياري والصح والخطأ فقط المجاوب عليها.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-val" id="statAns">0</div>
+                    <div class="stat-label">أجبت (الكل)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="statCorr" style="color: var(--success)">0</div>
+                    <div class="stat-label">صح (MCQ/TF)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="statWrng" style="color: var(--danger)">0</div>
+                    <div class="stat-label">خطأ (MCQ/TF)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="statSkip" style="color: var(--muted)">0</div>
+                    <div class="stat-label">لم تجب (الكل)</div>
+                </div>
+            </div>
+
+            <!-- Personal Message -->
+            <div class="personal-message-card">
+                <div class="msg-quote-mark">"</div>
+                <div class="msg-greeting">
+                    ازيك يا صديقي/صديقتي <span class="student-name-inline" style="color: var(--gold)">[Name]</span> 😊
+                </div>
+                <div class="msg-body">
+                    <p>عامل/عاملة إيه؟ فاكر/فاكرة لما اتعرفنا واتكلمنا سوا وقت امتحان الـ IOT؟ الموقف ده كان بداية معرفة جميلة ❤️</p>
+                    <p>المرة دي بقى جاي لك بحاجة مختلفة خالص… حاجة يمكن تكون سبب راحة لقلبك 🤍</p>
+                    
+                    <div class="msg-points" id="msgPoints">
+                        <div class="msg-point" style="animation-delay: 2s">
+                            <span class="mp-label">✨ أولًا: رسالة من ربنا:</span>
+                            <span class="mp-ayah">﴿ عَسَىٰ رَبُّنَا أَن يُبْدِلَنَا خَيْرًا مِّنْهَا ﴾</span>
+                            <p>اطفئ بهذه الآية نار حسرتك على كل فرصة ضاعت، وعلى كل وظيفة خسرتها، وعلى كل حبيب أفلت يدك في منتصف الطريق، وعلى كل صديق حسبت أن له وجهًا جميلًا فلم يكن هذا إلا قناعًا لذئب جارح.</p>
+                            <p>ما أخذه الله منك فله حكمة، وما تركه لك فرحمة، فإن علمت الحكمة فاشكر، وإن جهلتها فاصبر. أقدار الله كلها خير، وإن أوجعتك 🤍</p>
+                        </div>
+
+                        <div class="msg-point" style="animation-delay: 2.2s">
+                            <span class="mp-label">🌿 ثانيًا: رسالة من رسول الله ﷺ:</span>
+                            <span class="mp-hadith">«فانطلقتُ وأنا مهمومٌ على وجهي!»</span>
+                            <p>كانت عائشة تظن أن أصعب يوم مرّ على النبي ﷺ هو يوم أُحد، فقد قُتل عمه، وشُجَّ رأسه، وسال دمه الشريف، وكُسرت مقدمة أسنانه!</p>
+                            <p>فقال لها ﷺ: «هل أتى عليك يوم أشد من يوم أُحد؟» فحدثها عن يوم رجمه أهل الطائف… فانطلقتُ وأنا مهموم على وجهي، فلم أستفق إلا وأنا في قرن الثعالب، كان من الحزن يمشي ولا يدري أين أخذته قدماه!</p>
+                            <p>تفهم أن الحياة تضيق أحيانًا بأحسن الناس، وأننا قد نضعف لا من قلة الإيمان ولكن من قسوة الأيام، قد ينزل الهم بالحليم فيجعله حيرانًا، وقد ينزل الألم بكثير الضحك فيجعله عابسًا، وقد تشتد الهموم حتى لا تُرى، فقدّروا ظروف الناس، ولا تكونوا والدنيا عليهم، تمر بالإنسان لحظات لا يطيق فيها أن يسمع أو يقول كلمة… 🤍</p>
+                        </div>
+
+                        <div class="msg-point" style="animation-delay: 2.4s">
+                            <span class="mp-label">✨ وفي الآخر… دي رسالة بسيطة مني ليك:</span>
+                            <p>خليك دايمًا فاكر إنك أقوى مما تتخيل، وإن كل حاجة بتمر بيها هتعدي مهما كانت صعبة، ومتشيلش هم لوحدك… ربنا معاك دايمًا 🤍</p>
+                            <p>ولو احتجت أي حد تتكلم معاه، أنا موجود 🤝</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="msg-signature">
+                    <span>— أحمد 🌿</span>
+                </div>
+            </div>
+
+            <div class="review-section">
+                <button class="review-btn" onclick="toggleReview()">▼ مراجعة إجاباتك الدقيقة</button>
+                <div class="review-content" id="reviewContent"></div>
+            </div>
+
+            <div class="footer-sig">
+                Eng. Ahmed Eid | أحمد عيد · 🔐 Cybersecurity Exam System
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA (90 Questions from PDF Material) ---
+        // 50 MCQ, 20 T/F, 20 Essay
+        const rawMCQs = [
+            { text: "Which encryption uses the exact same key for both encryption and decryption?", options: ["a) Asymmetric Encryption", "b) Symmetric Encryption", "c) Hash Function", "d) Digital Signature"], correct: 1, drawing: 'keys' },
+            { text: "What is the relationship between the sender and receiver in a symmetric encryption system?", options: ["a) Receiver dominates", "b) Sender dominates", "c) Both are equivalent", "d) They use different algorithms"], correct: 2 },
+            { text: "Why is verification needed in digital signatures?", options: ["a) To encrypt the message", "b) To ensure message was sent by specific authentic person", "c) To compress data", "d) To generate public keys"], correct: 1 },
+            { text: "In asymmetric encryption, do the sender and receiver use the same key?", options: ["a) Yes, always", "b) No, they use entirely different keys", "c) Yes, but generated differently", "d) Only during initialization"], correct: 1, drawing: 'keys' },
+            { text: "What are the specific roles of public and private keys in asymmetric encryption?", options: ["a) Both for encryption", "b) Both for decryption", "c) One strictly for encryption, other strictly for decryption", "d) They are interchangeable anytime"], correct: 2 },
+            { text: "How are keys created for a user in asymmetric encryption?", options: ["a) A single key is split", "b) Sent by a central server in plain text", "c) A pair of mathematically linked keys is generated together", "d) Chosen randomly by the user with no link"], correct: 2 },
+            { text: "Why is asymmetric encryption considered computationally secure?", options: ["a) Because keys are never shared", "b) Because algorithms are secret", "c) Difficult to determine private key even with ciphertext and public key", "d) Because it uses symmetric techniques"], correct: 2 },
+            { text: "What determines the outcome of transformations in public key cryptography?", options: ["a) The network speed", "b) The specific unique key being used", "c) The length of the plaintext", "d) The size of the signature"], correct: 1 },
+            { text: "What two inputs does the encryption algorithm accept to create the ciphertext?", options: ["a) Ciphertext and Key", "b) Plaintext and Key", "c) Hash and Key", "d) Two different Keys"], correct: 1 },
+            { text: "What two inputs does the decryption algorithm require to function correctly?", options: ["a) Plaintext and Key", "b) Hash and Key", "c) Ciphertext and Key", "d) Signature and Key"], correct: 2 },
+            { text: "If A wants to send a confidential message to B, which key should A use?", options: ["a) A's public key", "b) A's private key", "c) B's public key", "d) B's private key"], correct: 2 },
+            { text: "How does User B decrypt the confidential message received from User A?", options: ["a) B's public key", "b) A's private key", "c) A's public key", "d) B's private key"], correct: 3 },
+            { text: "Where are private keys generated and managed in a public-key encryption system?", options: ["a) On a central server", "b) Locally on the user's device", "c) In the cloud", "d) By the Certificate Authority only"], correct: 1 },
+            { text: "A hash function accepts variable length data and produces...", options: ["a) Variable length ciphertext", "b) Fixed size hash value", "c) Encrypted public key", "d) Digital certificate"], correct: 1, drawing: 'hash' },
+            { text: "What is the underlying structure used in most hash functions called?", options: ["a) Iterated hash function", "b) Symmetric hashing", "c) Public hashing", "d) Reversible hash"], correct: 0 },
+            { text: "What is the block size and message digest size for SHA-512?", options: ["a) Block: 512, Digest: 512", "b) Block: 1024, Digest: 512", "c) Block: 1024, Digest: 1024", "d) Block: 512, Digest: 256"], correct: 1, drawing: 'hash' },
+            { text: "What is the Message Digest Size of SHA-384?", options: ["a) 256 bits", "b) 512 bits", "c) 384 bits", "d) 1024 bits"], correct: 2 },
+            { text: "What size block does SHA-256 process data in?", options: ["a) 256 bits", "b) 512 bits", "c) 1024 bits", "d) 128 bits"], correct: 1 },
+            { text: "What are the main applications of a Cryptographic Hash Function?", options: ["a) Key distribution", "b) Message Authentication and Digital Signature", "c) Symmetric Encryption", "d) Decrypting data"], correct: 1 },
+            { text: "Message Authentication verifies message integrity and ensures...", options: ["a) Source Address is valid", "b) The message is kept secret", "c) The public key is hidden", "d) Algorithms are symmetric"], correct: 0 },
+            { text: "In a Digital Signature, which key does the Sender use to encrypt the hash?", options: ["a) Sender's Public Key", "b) Receiver's Private Key", "c) Sender's Private Key", "d) Receiver's Public Key"], correct: 2 },
+            { text: "In a Digital Signature, which key does the Receiver use to decrypt the hash?", options: ["a) Sender's Public Key", "b) Receiver's Private Key", "c) Sender's Private Key", "d) Receiver's Public Key"], correct: 0 },
+            { text: "What is the notation for a Confidential Signature package?", options: ["a) M || H(M)", "b) E(K, [M || E(PRa, H(M))])", "c) M || H(M || S)", "d) E(K, H(M))"], correct: 1 },
+            { text: "How is a MAC calculated using a shared secret 'S'?", options: ["a) E(K, H(M))", "b) H(M || S)", "c) M || E(PRa, H(M))", "d) H(S)"], correct: 1 },
+            { text: "What is the main purpose of a Public-Key Certificate?", options: ["a) To encrypt large files", "b) To generate symmetric keys", "c) To securely link a user's identity to their public key", "d) To hide the user's identity"], correct: 2, drawing: 'cert' },
+            { text: "Who signs the contents of a Public-Key Certificate?", options: ["a) The Sender", "b) The Receiver", "c) A trusted Certificate Authority (CA)", "d) A Key Distribution Center"], correct: 2 },
+            { text: "How does a user verify a digital certificate?", options: ["a) Decrypting signature with CA's private key", "b) Decrypting signature with CA's public key", "c) Encrypting with CA's public key", "d) Checking the user's private key"], correct: 1 },
+            { text: "What should a user do if their private key is compromised?", options: ["a) Continue using it", "b) Keep it a secret", "c) Generate a new pair and apply for a new certificate", "d) Ask the CA to fix the private key"], correct: 2 },
+            { text: "Which of these is NOT a requirement for public-key certificates?", options: ["a) Any participant can read it", "b) Must be verifiable", "c) Can be updated by the user anytime", "d) Strictly controlled by CA"], correct: 2 },
+            { text: "In certificate notation, what does Y<<X>> mean?", options: ["a) Certificate of Y issued by X", "b) Certificate of X issued by Y", "c) X encrypts Y", "d) Y sends message to X"], correct: 1, drawing: 'cert' },
+            { text: "What is a Certificate Revocation List (CRL)?", options: ["a) List of valid users", "b) List of new algorithms", "c) Directory containing certificates that are no longer valid", "d) List of CA servers"], correct: 2 },
+            { text: "Which of the following is a valid reason to revoke a certificate?", options: ["a) The user changed their password", "b) The CA's own certificate is compromised", "c) The user bought a new computer", "d) The message was lost in transit"], correct: 1 },
+            { text: "In the certification path <<U>>T, <<T>>I, <<I>>K, <<K>>M... what does <<I>>K mean?", options: ["a) K is the parent of I", "b) Certificate of K issued by I", "c) Certificate of I issued by K", "d) I and K are the same user"], correct: 1 },
+            { text: "In symmetric encryption, the main problem is...", options: ["a) Algorithm speed", "b) Securely exchanging keys over a network", "c) Complex mathematics", "d) Generating random numbers"], correct: 1, drawing: 'keys' },
+            { text: "What is the difference between plaintext and ciphertext?", options: ["a) Plaintext is numbers, ciphertext is text", "b) Plaintext is readable, ciphertext is scrambled", "c) Plaintext is for symmetric, ciphertext for asymmetric", "d) They are the same thing"], correct: 1 },
+            { text: "To guarantee BOTH confidentiality and authentication, you must:", options: ["a) Encrypt with Sender's Private, then Receiver's Public", "b) Encrypt with Receiver's Public only", "c) Encrypt with Sender's Private only", "d) Use Hash only"], correct: 0 },
+            { text: "Which is a major advantage of Public-Key Cryptography over Symmetric?", options: ["a) Faster encryption", "b) Smaller keys", "c) Private keys never need to be distributed", "d) Less secure"], correct: 2 },
+            { text: "How does a Hash function differ from regular encryption?", options: ["a) Hash is reversible", "b) Hash is irreversible (one-way)", "c) Hash uses two keys", "d) Hash produces larger output than input"], correct: 1 },
+            { text: "The term 'Authentication' in cybersecurity primarily means proving:", options: ["a) Data is encrypted", "b) Source/Identity is valid", "c) System is fast", "d) Network is available"], correct: 1 },
+            { text: "What is the number of steps for the SHA-512 algorithm?", options: ["a) 64", "b) 80", "c) 128", "d) 256"], correct: 1 },
+            { text: "Which algorithm uses 64 steps?", options: ["a) SHA-1", "b) SHA-384", "c) SHA-256", "d) SHA-512"], correct: 2 },
+            { text: "In the context of Hash functions, what does 'CV' stand for?", options: ["a) Certificate Verification", "b) Chaining Variable", "c) Constant Value", "d) Cyclic Vector"], correct: 1 },
+            { text: "To protect a message's INTEGRITY without encryption, you append a:", "options": ["a) Private key", "b) Public key", "c) Hash or MAC", "d) Plaintext copy"], correct: 2 },
+            { text: "If the CA itself gets hacked, what happens to the certificates it issued?", options: ["a) Nothing", "b) They are renewed automatically", "c) They are added to the CRL (Revoked)", "d) Users must share their private keys"], correct: 2 },
+            { text: "Reverse diagrams: To verify E(K, [M || H(M)]), the receiver FIRST...", options: ["a) Decrypts with K", "b) Hashes M", "c) Compares hashes", "d) Encrypts M"], correct: 0 },
+            { text: "Reverse diagrams: To verify M || H(M || S), the receiver...", options: ["a) Decrypts M with S", "b) Appends S to M, hashes, then compares", "c) Checks the CRL", "d) Requests Public Key"], correct: 1 },
+            { text: "Reverse diagrams: To verify M || E(PRa, H(M)), the receiver uses what to decrypt the signature?", options: ["a) Sender's Private Key", "b) Receiver's Public Key", "c) Sender's Public Key (PUa)", "d) Shared Key K"], correct: 2 },
+            { text: "What is an 'Iterated' Hash Function?", options: ["a) It runs only once", "b) It processes input in equal blocks repeatedly", "c) It uses public keys", "d) It is easily reversible"], correct: 1, drawing: 'hash' },
+            { text: "Symmetric Encryption is mainly criticized for its lack of native:", options: ["a) Speed", "b) Confidentiality", "c) Key exchange security and Digital Signatures", "d) File size limits"], correct: 2 },
+            { text: "When creating a new pair of keys locally, which key is distributed to the CA?", options: ["a) Private Key", "b) Public Key", "c) Both keys", "d) Neither"], correct: 1 }
+        ];
+
+        const rawTFs = [
+            { text: "Encryption Algorithm accepts the plaintext and the key to produce the ciphertext.", correct: 'true' },
+            { text: "If user B wants to send a confidential message to user A, B must encrypt with the public key of A.", correct: 'true' },
+            { text: "The hash function SHA-512 outputs a message of 512 bits.", correct: 'true', drawing: 'hash' },
+            { text: "The input block size of SHA-512 is 512 bits.", correct: 'false' },
+            { text: "Private keys must be generated locally and kept secret.", correct: 'true', drawing: 'keys' },
+            { text: "In Symmetric Encryption, the sender and receiver use different keys.", correct: 'false' },
+            { text: "Verification in digital signatures ensures that a message was sent by a specific person.", correct: 'true' },
+            { text: "In Asymmetric encryption, one key is strictly used for encryption and the other for decryption.", correct: 'true' },
+            { text: "It is computationally easy to determine the private decryption key if you have the public key.", correct: 'false' },
+            { text: "The specific transformations performed on the message depend entirely on the unique key being used.", correct: 'true' },
+            { text: "User B decrypts a confidential message received from User A using User A's private key.", correct: 'false' },
+            { text: "A hash function accepts variable length data and produces variable length hash value.", correct: 'false' },
+            { text: "Message authentication guarantees that the message was not altered.", correct: 'true' },
+            { text: "The destination uses the public key to decrypt the hash in a digital signature.", correct: 'true' },
+            { text: "A digital certificate links a user's identity to their private key.", correct: 'false', drawing: 'cert' },
+            { text: "Certificates are revoked and added to CRL if the private key is compromised.", correct: 'true' },
+            { text: "Only the certificate authority (CA) can create and update certificates.", correct: 'true' },
+            { text: "If user A's private key is compromised, the CA will send them a new private key.", correct: 'false' },
+            { text: "A Certificate Revocation List (CRL) contains a list of new users joining the network.", correct: 'false' },
+            { text: "To guarantee both confidentiality and authentication, the message must be encrypted twice.", correct: 'true' }
+        ];
+
+        const rawEssays = [
+            { text: "Discuss the difference between Symmetric Encryption and Public Key Encryption.", correct: "التشفير المتماثل يستخدم مفتاحاً واحداً مشتركاً للقفل والفتح. بينما التشفير بالمفتاح العام يستخدم مفتاحين (عام للقفل وخاص للفتح)، مما يحل مشكلة تبادل المفاتيح بأمان.", drawing: 'keys' },
+            { text: "What are the two main problems with symmetric encryption?", correct: "يواجه التشفير المتماثل صعوبة في 1. تبادل المفاتيح بأمان عبر الشبكة. 2. التحقق من هوية المرسل (عدم وجود توقيع رقمي أصلي)." },
+            { text: "How does public-key encryption solve the key exchange problem?", correct: "يستخدم زوجاً من المفاتيح: المفتاح العام يوزع للجميع لتشفير البيانات، والمفتاح الخاص يظل سرياً ومحلياً لفك التشفير، فلا نحتاج لإرسال المفتاح السري عبر الشبكة أبداً." },
+            { text: "How do you achieve confidentiality when sending a message from Alice to Bob?", correct: "تقوم أليس بتشفير الرسالة باستخدام (المفتاح العام الخاص بـ بوب)، بحيث لا يستطيع فتحها إلا بوب باستخدام (مفتاحه الخاص)." },
+            { text: "How does a sender prove their identity (Authentication) using public-key cryptography?", correct: "يقوم المرسل بتشفير الرسالة أو الهاش بـ (مفتاحه الخاص)، مما يسمح لأي شخص بالتحقق باستخدام (المفتاح العام للمرسل)، وهذا يثبت أنه هو من أرسلها." },
+            { text: "How can a system guarantee both confidentiality and authentication for a single message?", correct: "يتم تشفير الرسالة أولاً بـ (المفتاح الخاص للمرسل) لإثبات الهوية، ثم تشفيرها مرة أخرى بـ (المفتاح العام للمستلم) لضمان الخصوصية." },
+            { text: "What are the main advantages of public-key cryptography?", correct: "المفاتيح الخاصة تنشأ محلياً ولا يتم توزيعها عبر الشبكة إطلاقاً، مما يزيد الأمان ويتيح تغيير المفاتيح في أي وقت دون مشاكل توزيع." },
+            { text: "What are the two main characteristics of a Cryptographic Hash Function?", correct: "تقبل رسالة (متغيرة الطول - Variable length) وتنتج قيمة هاش (بحجم ثابت - Fixed size).", drawing: 'hash' },
+            { text: "What is the underlying structure used in most hash functions called?", correct: "يطلق عليها دالة الهاش التكرارية (Iterated hash function)، والتي تعالج المدخلات في بلوكات متساوية عبر خوارزمية ضغط." },
+            { text: "What are the three main goals of Message Authentication?", correct: "1. التحقق من سلامة الرسالة (Integrity). 2. التأكد من استلام البيانات كما أرسلت بالضبط. 3. التحقق من هوية المرسل (Valid Sender)." },
+            { text: "How does a Digital Signature use a hash function to prove authenticity?", correct: "يقوم المرسل بعمل Hash للرسالة، ثم يشفر الهاش بـ (مفتاحه الخاص). ويقوم المستقبل بفك تشفيره بـ (المفتاح العام للمرسل) ليتأكد من صحة التوقيع." },
+            { text: "How can message authentication be achieved using a shared secret value?", correct: "يقوم المرسل بدمج الرسالة مع قيمة سرية مشتركة (S) ويحسب الهاش لهما معاً، ويرسل الهاش مع الرسالة الأصلية. ولا يمكن للهاكر تزوير الهاش لأنه لا يملك السّر." },
+            { text: "What is the main purpose of a Public-Key Certificate?", correct: "تربط بين هوية المستخدم ومفتاحه العام بشكل آمن، وموقعة رقمياً من جهة إصدار شهادات موثوقة (CA).", drawing: 'cert' },
+            { text: "How does a user verify a digital certificate received from another user?", correct: "يتحقق المستخدم من الشهادة عن طريق فك تشفير التوقيع الرقمي عليها باستخدام (المفتاح العام لجهة الإصدار CA)." },
+            { text: "What should a user do if their private key is compromised?", correct: "يجب عليه إنشاء زوج جديد من المفاتيح محلياً، ثم التقديم لجهة الـ CA للحصول على شهادة رقمية جديدة تماماً." },
+            { text: "What are the three main requirements for public-key certificates (RVSC)?", correct: "1. مقروءة للجميع (Readability). 2. يمكن لأي شخص التحقق منها (Verifiability). 3. الإدارة والتحديث يتم فقط بواسطة الـ CA (Strict Control)." },
+            { text: "In certificate notation, what does Y<<X>> mean?", correct: "تعني: شهادة رقمية تخص المستخدم X، تم إصدارها وتوقيعها بواسطة جهة الإصدار Y. (المُصدِر يكتب أولاً)." },
+            { text: "What is a Certificate Revocation List (CRL)?", correct: "هي قائمة (دليل/Blacklist) تحتفظ بها الـ CA تحتوي على الشهادات التي لم تعد صالحة أو تم اختراقها قبل موعد انتهائها." },
+            { text: "Name three reasons why a certificate might be revoked before it expires.", correct: "1. اختراق المفتاح الخاص للمستخدم. 2. المستخدم ترك العمل أو لم يعد مصرحاً له. 3. اختراق الـ CA نفسها." },
+            { text: "Describe the verification operation for E(K, [M || E(PRa, H(M))])", correct: "المستقبل يفك التشفير الخارجي بالمفتاح K، يفصل الرسالة M عن التوقيع، يحسب هاش للرسالة، يفك التوقيع بـ PUa للمرسل، ثم يقارن نتيجتي الهاش." }
+        ];
+
+        // Format for the main questions array
+        let questions = [];
+        rawMCQs.forEach(q => questions.push({ type: 'mcq', dir: q.dir || 'ltr', text: q.text, options: q.options, correct: q.correct, drawing: q.drawing }));
+        rawTFs.forEach(q => questions.push({ type: 'tf', dir: 'ltr', text: q.text, correct: q.correct, drawing: q.drawing }));
+        rawEssays.forEach(q => questions.push({ type: 'essay', dir: q.dir || 'ltr', text: q.text, correctText: q.correct, drawing: q.drawing }));
+
+        let userAnswers = new Array(questions.length).fill(null);
+        let studentName = "";
+
+        // --- BACKGROUND PARTICLES ---
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for(let i=0; i<30; i++) {
+                let span = document.createElement('span');
+                span.className = 'particle';
+                span.innerText = Math.random() > 0.5 ? '0' : '1';
+                span.style.left = Math.random() * 100 + 'vw';
+                span.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                span.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(span);
+            }
+        }
+        createParticles();
+
+        // --- TYPEWRITER ---
+        const text = "استعد، ركز، وأثبت إنك قادر ✨";
+        let twIndex = 0;
+        function typeWriter() {
+            if (twIndex < text.length) {
+                document.getElementById("typewriter").innerHTML += text.charAt(twIndex);
+                twIndex++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+        setTimeout(typeWriter, 1000);
+
+        // --- CSS DRAWINGS GENERATOR ---
+        function getDrawingHTML(type) {
+            if (type === 'keys') {
+                return `
+                    <div class="css-drawing-container">
+                        <div class="css-keys">
+                            <div class="css-key-wrapper">
+                                <div class="css-key-icon"></div>
+                                <div class="key-label">Public Key 🔓</div>
+                            </div>
+                            <div class="css-key-wrapper">
+                                <div class="css-key-icon private"></div>
+                                <div class="key-label">Private Key 🔐</div>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (type === 'hash') {
+                return `
+                    <div class="css-drawing-container">
+                        <div class="css-hash-box">
+                            <div class="hash-data">VARIABLE DATA</div>
+                            <div class="hash-funnel-wrapper">
+                                <div class="hash-funnel-top"><span class="hash-funnel-text">SHA</span></div>
+                                <div class="hash-funnel-bottom"></div>
+                            </div>
+                            <div class="hash-output">0xFIXED</div>
+                        </div>
+                    </div>`;
+            } else if (type === 'cert') {
+                return `
+                    <div class="css-drawing-container">
+                        <div class="css-cert-doc">
+                            <div class="cert-body">
+                                <div class="cert-header"></div>
+                                <div class="cert-line"></div>
+                                <div class="cert-line short"></div>
+                                <div class="cert-line"></div>
+                                <div class="cert-seal-wrapper">
+                                    <div class="cert-seal">CA</div>
+                                    <div class="cert-ribbon">
+                                        <div class="cert-ribbon-tail"></div>
+                                        <div class="cert-ribbon-tail"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+            return '';
+        }
+
+        // --- EXAM RENDERER ---
+        function renderExam() {
+            const container = document.getElementById('q-container');
+            container.innerHTML = '';
+            
+            questions.forEach((q, i) => {
+                let card = document.createElement('div');
+                card.className = `q-card ${q.type === 'essay' ? 'essay-card' : ''}`;
+                card.id = `qcard-${i}`;
+                let numStr = (i + 1).toString().padStart(2, '0');
+                
+                let icon = '🔐';
+                if(q.type === 'tf') icon = '⚖️';
+                if(q.type === 'essay') icon = '✍️';
+
+                let essayBadge = q.type === 'essay' ? '<span class="essay-note">سؤال مقالي</span>' : '';
+                let drawingHTML = q.drawing ? getDrawingHTML(q.drawing) : '';
+
+                let html = `
+                    <div class="q-header" dir="${q.dir === 'rtl' ? 'rtl' : 'ltr'}">
+                        <div class="q-badge">
+                            <span class="q-num">${numStr}</span>
+                            <span class="q-type-icon">${icon}</span>
+                        </div>
+                        ${essayBadge}
+                    </div>
+                    <div class="q-text" dir="${q.dir === 'rtl' ? 'rtl' : 'ltr'}">${q.text}</div>
+                    ${drawingHTML}
+                `;
+
+                if (q.type === 'mcq') {
+                    let opts = `<div class="mcq-options" dir="${q.dir}">`;
+                    let letters = ['A', 'B', 'C', 'D'];
+                    q.options.forEach((opt, optIdx) => {
+                        opts += `
+                            <label class="mcq-option" id="opt-${i}-${optIdx}" onclick="selectMCQ(${i}, ${optIdx}, this)">
+                                <span class="opt-letter">${letters[optIdx]}</span>
+                                <span class="opt-text">${opt.substring(3)}</span>
+                                <span class="opt-check">✓</span>
+                            </label>
+                        `;
+                    });
+                    opts += `</div>`;
+                    html += opts;
+                } 
+                else if (q.type === 'tf') {
+                    html += `
+                        <div class="tf-group" dir="ltr">
+                            <button class="tf-btn" id="tf-${i}-true" onclick="selectTF(${i}, 'true', this)">✅ صح / True</button>
+                            <button class="tf-btn" id="tf-${i}-false" onclick="selectTF(${i}, 'false', this)">❌ خطأ / False</button>
+                        </div>
+                    `;
+                }
+                else if (q.type === 'essay') {
+                    html += `<textarea class="essay-input" dir="${q.dir === 'rtl' ? 'rtl' : 'ltr'}" placeholder="اكتب إجابتك هنا..." oninput="handleText(${i}, this.value)"></textarea>`;
+                }
+
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+        }
+
+        // --- INTERACTIONS ---
+        function selectMCQ(qIdx, optIdx, el) {
+            document.querySelectorAll(`#qcard-${qIdx} .mcq-option`).forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            userAnswers[qIdx] = optIdx;
+            markAnswered(qIdx);
+        }
+
+        function selectTF(qIdx, val, el) {
+            document.querySelectorAll(`#qcard-${qIdx} .tf-btn`).forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            userAnswers[qIdx] = val;
+            markAnswered(qIdx);
+        }
+
+        function handleText(qIdx, val) {
+            userAnswers[qIdx] = val.trim();
+            if (val.trim() !== "") markAnswered(qIdx);
+            else unmarkAnswered(qIdx);
+        }
+
+        function markAnswered(qIdx) {
+            document.getElementById(`qcard-${qIdx}`).classList.add('answered');
+            updateProgress();
+        }
+        function unmarkAnswered(qIdx) {
+            document.getElementById(`qcard-${qIdx}`).classList.remove('answered');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let answered = userAnswers.filter(a => a !== null && a !== "").length;
+            let total = questions.length;
+            document.getElementById('prog-text').innerText = `${answered}/${total}`;
+            document.getElementById('prog-bar').style.width = `${(answered/total)*100}%`;
+        }
+
+        // --- NAVIGATION ---
+        function startExam() {
+            const input = document.getElementById('studentName');
+            const err = document.getElementById('nameError');
+            if(input.value.trim() === '') {
+                input.classList.add('error');
+                err.style.display = 'block';
+                setTimeout(() => input.classList.remove('error'), 400);
+                return;
+            }
+            studentName = input.value.trim();
+            document.querySelectorAll('.student-name-inline').forEach(el => el.textContent = studentName);
+            
+            renderExam();
+            transitionTo(2);
+            
+            // Stagger cards entrance
+            setTimeout(() => {
+                document.querySelectorAll('.q-card').forEach((card, i) => {
+                    setTimeout(() => {
+                        card.style.opacity = 1;
+                        card.style.transform = 'translateY(0)';
+                    }, (i % 10) * 80); 
+                });
+            }, 600);
+        }
+
+        function transitionTo(screenNum) {
+            const overlay = document.getElementById('transition');
+            overlay.classList.add('active');
+            
+            setTimeout(() => {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('screen' + screenNum).classList.add('active');
+                
+                // Absolute guaranteed scroll to top on screen change
+                window.scrollTo(0, 0);
+            }, 500);
+
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 1000);
+        }
+
+        function showSubmitModal() {
+            document.getElementById('submitModal').classList.add('active');
+        }
+        function closeSubmitModal() {
+            document.getElementById('submitModal').classList.remove('active');
+        }
+
+        // --- SCORING ---
+        function submitExam() {
+            closeSubmitModal();
+            document.getElementById('loader-text').innerText = "ANALYZING ANSWERS...";
+            transitionTo(3);
+            setTimeout(processResults, 1000);
+        }
+
+        function processResults() {
+            let mcqTfTotal = 0;
+            let mcqTfAnswered = 0;
+            let totalCorrect = 0;
+            let totalWrong = 0;
+            let allAnswered = 0;
+            
+            questions.forEach((q, i) => {
+                const ans = userAnswers[i];
+                const isEmpty = (ans === null || ans === undefined || (typeof ans === 'string' && ans.trim() === ''));
+                
+                if (!isEmpty) allAnswered++;
+
+                if (q.type === 'mcq' || q.type === 'tf') {
+                    mcqTfTotal++;
+                    if (!isEmpty) {
+                        mcqTfAnswered++;
+                        if (String(ans) === String(q.correct)) {
+                            totalCorrect++;
+                        } else {
+                            totalWrong++;
+                        }
+                    }
+                }
+            });
+
+            let skippedAll = questions.length - allAnswered;
+            let percentage = mcqTfAnswered > 0 ? Math.round((totalCorrect / mcqTfAnswered) * 100) : 0;
+
+            // Update UI
+            document.getElementById('scoreFraction').innerText = `${totalCorrect} / ${mcqTfAnswered}`;
+            document.getElementById('statAns').innerText = allAnswered;
+            document.getElementById('statCorr').innerText = totalCorrect;
+            document.getElementById('statWrng').innerText = totalWrong;
+            document.getElementById('statSkip').innerText = skippedAll;
+
+            // Animate Score Number
+            animateValue("scoreVal", 0, percentage, 1500);
+
+            // Animate Ring & Determine Badge
+            const ring = document.getElementById('scoreRing');
+            const radius = ring.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            const offset = circumference - (percentage / 100) * circumference;
+            
+            setTimeout(() => {
+                ring.style.strokeDashoffset = offset;
+                
+                let color = 'var(--success)';
+                let badgeText = '';
+                if(mcqTfAnswered === 0) {
+                    color = 'var(--muted)';
+                    badgeText = "😅 لم تتم الإجابة على أي سؤال اختياري أو صح وخطأ";
+                } else if(percentage >= 90) {
+                    badgeText = "🏆 ACCESS GRANTED — ممتاز! أنت نجم الدفعة";
+                } else if(percentage >= 75) {
+                    badgeText = "🥇 HIGH CLEARANCE — جيد جداً! مستواك عالي";
+                } else if(percentage >= 60) {
+                    color = 'var(--gold)';
+                    badgeText = "🥈 CLEARANCE OK — جيد، استمر وهتوصل";
+                } else if(percentage >= 40) {
+                    color = 'var(--gold)';
+                    badgeText = "💪 LIMITED ACCESS — لازم تراجع أكتر";
+                } else {
+                    color = 'var(--danger)';
+                    badgeText = "📚 ACCESS DENIED — ابدأ من الأساسيات";
+                }
+                
+                ring.style.stroke = color;
+                ring.style.filter = `drop-shadow(0 0 10px ${color})`;
+                
+                const badge = document.getElementById('perfBadge');
+                badge.innerText = badgeText;
+                badge.style.color = color;
+
+                if(percentage >= 70 && mcqTfAnswered > 0) createBurst();
+
+            }, 500);
+
+            renderReview();
+        }
+
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            let range = end - start;
+            let current = start;
+            let increment = end > start ? 1 : -1;
+            let stepTime = Math.abs(Math.floor(duration / range));
+            let obj = document.getElementById(id);
+            let timer = setInterval(function() {
+                current += increment;
+                obj.innerHTML = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        function createBurst() {
+            for(let i=0; i<30; i++) {
+                let p = document.createElement('div');
+                p.style.position = 'absolute';
+                p.style.width = '5px'; p.style.height = '5px';
+                p.style.background = 'var(--accent)';
+                p.style.left = '50%'; p.style.top = '150px';
+                p.style.borderRadius = '50%';
+                p.style.boxShadow = '0 0 10px var(--accent)';
+                document.getElementById('screen3').appendChild(p);
+                
+                let angle = Math.random() * Math.PI * 2;
+                let velocity = 50 + Math.random() * 100;
+                let tx = Math.cos(angle) * velocity;
+                let ty = Math.sin(angle) * velocity;
+                
+                p.animate([
+                    { transform: 'translate(0,0) scale(1)', opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+                ], { duration: 1000 + Math.random()*500, easing: 'cubic-bezier(0, .9, .57, 1)' });
+                
+                setTimeout(() => p.remove(), 1500);
+            }
+        }
+
+        function renderReview() {
+            const cont = document.getElementById('reviewContent');
+            let html = '';
+            
+            questions.forEach((q, i) => {
+                const ans = userAnswers[i];
+                const isEmpty = (ans === null || ans === undefined || (typeof ans === 'string' && ans.trim() === ''));
+                
+                let statusClass = 'skipped';
+                let statusText = '⬜ لم تجب';
+                let userAnswerText = isEmpty ? '<span style="color:var(--muted)">لم تجب</span>' : ans;
+                let correctAnswerText = '';
+
+                if (q.type === 'essay') {
+                    statusClass = 'manual';
+                    correctAnswerText = q.correctText;
+                } 
+                else if (q.type === 'mcq') {
+                    correctAnswerText = q.options[q.correct];
+                    if (!isEmpty) {
+                        userAnswerText = q.options[ans];
+                        if (String(ans) === String(q.correct)) {
+                            statusClass = 'correct'; statusText = '✅ إجابة صحيحة';
+                        } else {
+                            statusClass = 'wrong'; statusText = '❌ إجابة خاطئة';
+                        }
+                    }
+                } 
+                else if (q.type === 'tf') {
+                    correctAnswerText = q.correct === 'true' ? '✅ صح / True' : '❌ خطأ / False';
+                    if (!isEmpty) {
+                        userAnswerText = ans === 'true' ? '✅ صح / True' : '❌ خطأ / False';
+                        if (String(ans) === String(q.correct)) {
+                            statusClass = 'correct'; statusText = '✅ إجابة صحيحة';
+                        } else {
+                            statusClass = 'wrong'; statusText = '❌ إجابة خاطئة';
+                        }
+                    }
+                }
+
+                html += `<div class="rev-item ${statusClass}" dir="${q.dir === 'rtl' ? 'rtl' : 'ltr'}">`;
+                html += `<div class="rev-q">Q${i+1}: ${q.text} ${q.type === 'essay' ? '<span style="font-size:0.8rem; color:var(--gold)">(سؤال مقالي)</span>' : ''}</div>`;
+
+                if (q.type === 'essay') {
+                    html += `<div class="rev-ans"><strong>إجابتك:</strong><br/> ${userAnswerText}</div>`;
+                    html += `<div class="rev-ans" style="color: var(--accent); margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--primary-mid);">
+                                <strong>الإجابة النموذجية للمقارنة:</strong><br/> ${correctAnswerText}
+                             </div>`;
+                } else {
+                    html += `<div class="rev-status" style="color: var(--${statusClass === 'correct' ? 'success' : (statusClass === 'wrong' ? 'danger' : 'muted')});">${statusText}</div>`;
+                    html += `<div class="rev-ans"><strong>إجابتك:</strong> ${userAnswerText}</div>`;
+                    
+                    // Show correct answer if wrong or skipped
+                    if (statusClass === 'wrong' || statusClass === 'skipped') {
+                        html += `<div class="rev-ans" style="color: var(--accent); margin-top: 8px;">
+                                    <strong>الإجابة الصحيحة:</strong> ${correctAnswerText}
+                                 </div>`;
+                    }
+                }
+
+                html += `</div>`;
+            });
+            
+            cont.innerHTML = html;
+        }
+
+        function toggleReview() {
+            document.getElementById('reviewContent').classList.toggle('active');
+        }
+
+        // Add Enter key support for input
+        document.getElementById('studentName').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') startExam();
+        });
+    </script>
+</body>
+</html>
